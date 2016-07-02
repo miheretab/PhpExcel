@@ -220,6 +220,33 @@ class PhpExcelComponent extends Component {
         return $this;
     }
 
+    public function addMergedHeader($title, $params = array(), $from = 'A1', $to = 'C1') {
+        // offset
+        $offset = 0;
+        if (isset($params['offset']))
+            $offset = is_numeric($params['offset']) ? (int)$params['offset'] : PHPExcel_Cell::columnIndexFromString($params['offset']);
+
+        // font name
+        if (isset($params['font']))
+            $this->_xls->getActiveSheet()->getStyle($this->_row)->getFont()->setName($params['font']);
+
+        // font size
+        if (isset($params['size']))
+            $this->_xls->getActiveSheet()->getStyle($this->_row)->getFont()->setSize($params['size']);
+
+        // bold
+        if (isset($params['bold']))
+            $this->_xls->getActiveSheet()->getStyle($this->_row)->getFont()->setBold($params['bold']);
+
+        // italic
+        if (isset($params['italic']))
+            $this->_xls->getActiveSheet()->getStyle($this->_row)->getFont()->setItalic($params['italic']);
+            
+        $this->_xls->getActiveSheet()->mergeCells($from . ':' . $to);
+        $this->_xls->getActiveSheet()->setCellValueByColumnAndRow($offset, $this->_row, $title);
+        $this->_row++;
+    }
+
     /**
      * Write array of data to current row
      *
@@ -337,6 +364,7 @@ class PhpExcelComponent extends Component {
         header('Cache-Control: max-age=0');
 
         // writer
+        PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
         $objWriter = $this->getWriter($writer);
         $objWriter->save('php://output');
 
