@@ -3,6 +3,7 @@
     "description" : "PhpExcel helper and component for CakePHP 2.x",
     "license" : "WTFPL",
     "type" : "cakephp-plugin",
+    "homepage": "https://github.com/miheretab/PhpExcel",
     "authors": [],
     "require" : {
         "composer/installers": "*"
